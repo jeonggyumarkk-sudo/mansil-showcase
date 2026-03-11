@@ -42,7 +42,7 @@ export function Sidebar({ className = '' }: SidebarProps) {
     return (
         <aside className={`bg-white border-r border-gray-200 h-full flex flex-col ${className}`}>
             <div className="p-6">
-                <h2 className="text-xl font-bold text-primary-600">만실</h2>
+                <h2 className="text-2xl font-bold tracking-tighter text-blue-600">mansil.</h2>
             </div>
 
             <nav className="flex-1 px-4 space-y-1">

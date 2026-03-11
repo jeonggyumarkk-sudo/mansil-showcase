@@ -121,7 +121,7 @@ export function PropertySearch() {
             {/* Top bar */}
             <div className="bg-white border-b border-gray-200 px-4 py-2.5 flex items-center gap-3 z-10">
                 {/* Logo */}
-                <span className="text-lg font-extrabold text-indigo-600 flex-shrink-0 tracking-tight">만실</span>
+                <span className="text-2xl font-bold tracking-tighter text-blue-600 flex-shrink-0">mansil.</span>
 
                 {/* Center: search + filters */}
                 <div className="flex-1 flex items-center justify-center gap-2">

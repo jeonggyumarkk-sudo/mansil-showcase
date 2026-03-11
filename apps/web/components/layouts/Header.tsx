@@ -20,7 +20,7 @@ export function Header({ onMenuClick, className = '' }: HeaderProps) {
                     <Menu className="w-6 h-6" />
                 </button>
 
-                <span className="lg:hidden text-lg font-bold text-primary-600">만실</span>
+                <span className="lg:hidden text-2xl font-bold tracking-tighter text-blue-600">mansil.</span>
 
                 <div className="hidden md:flex max-w-md w-full">
                     <div className="relative w-full">
