@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { PropertyMap } from '@/components/features/property/PropertyMap';
 import { Button, Input } from '@mansil/ui';
-import { List, Map as MapIcon, Filter, Building2, MapPin, Calendar, Camera, Image } from 'lucide-react';
+import { List, Map as MapIcon, Search, Building2, MapPin, Calendar, Camera, Image } from 'lucide-react';
 import type { MapListing } from './LeafletMap';
 
 const TYPE_COLORS: Record<string, string> = {
@@ -119,50 +119,55 @@ export function PropertySearch() {
     return (
         <div className="flex h-[calc(100vh-4rem)] flex-col -mb-8 lg:-mb-8">
             {/* Top bar */}
-            <div className="bg-white border-b border-gray-200 p-3 flex items-center gap-2 z-10">
-                <div className="flex-1 max-w-sm">
-                    <Input
-                        placeholder="지역, 건물명, 동 검색"
-                        className="w-full"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
-                </div>
+            <div className="bg-white border-b border-gray-200 px-4 py-2.5 flex items-center gap-3 z-10">
+                {/* Logo */}
+                <span className="text-lg font-extrabold text-indigo-600 flex-shrink-0 tracking-tight">만실</span>
 
-                {/* Type filter chips */}
-                <div className="hidden md:flex items-center gap-1 px-2">
-                    {TYPE_OPTIONS.map(opt => (
-                        <button
-                            key={opt.value}
-                            onClick={() => setTypeFilter(typeFilter === opt.value ? '' : opt.value)}
-                            className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
-                                typeFilter === opt.value
-                                    ? 'bg-gray-900 text-white'
-                                    : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                            }`}
-                        >
-                            {opt.label}
-                        </button>
-                    ))}
-                </div>
+                {/* Center: search + filters */}
+                <div className="flex-1 flex items-center justify-center gap-2">
+                    <div className="relative w-full max-w-md">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                        <Input
+                            placeholder="지역, 건물명, 동 검색"
+                            className="w-full pl-9"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
 
-                {/* Mobile filter button */}
-                <div className="md:hidden">
-                    <select
-                        className="text-sm border border-gray-300 rounded-lg px-2 py-1.5"
-                        value={typeFilter}
-                        onChange={(e) => setTypeFilter(e.target.value)}
-                    >
+                    {/* Type filter chips — desktop */}
+                    <div className="hidden lg:flex items-center gap-1">
                         {TYPE_OPTIONS.map(opt => (
-                            <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            <button
+                                key={opt.value}
+                                onClick={() => setTypeFilter(typeFilter === opt.value ? '' : opt.value)}
+                                className={`px-2.5 py-1 rounded-full text-xs font-semibold transition-all ${
+                                    typeFilter === opt.value
+                                        ? 'bg-gray-900 text-white'
+                                        : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                                }`}
+                            >
+                                {opt.label}
+                            </button>
                         ))}
-                    </select>
-                </div>
+                    </div>
 
-                <div className="flex-1" />
+                    {/* Type filter — mobile */}
+                    <div className="lg:hidden flex-shrink-0">
+                        <select
+                            className="text-sm border border-gray-300 rounded-lg px-2 py-1.5"
+                            value={typeFilter}
+                            onChange={(e) => setTypeFilter(e.target.value)}
+                        >
+                            {TYPE_OPTIONS.map(opt => (
+                                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                            ))}
+                        </select>
+                    </div>
+                </div>
 
                 {/* View toggle */}
-                <div className="flex bg-gray-100 rounded-lg p-1">
+                <div className="flex bg-gray-100 rounded-lg p-1 flex-shrink-0">
                     {[
                         { key: 'map' as const, icon: <MapIcon className="w-4 h-4" />, label: '지도' },
                         { key: 'both' as const, icon: <span className="text-xs font-bold">둘다</span>, label: '둘다' },
