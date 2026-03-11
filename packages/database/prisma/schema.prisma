@@ -1,0 +1,313 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// NOTE: SQLite does not support Prisma enums or Json type.
+// Enum validation is enforced at the application/TypeScript layer.
+// See packages/types for enum definitions:
+//   Role: ADMIN, AGENT, LANDLORD, TENANT
+//   PropertyType: ONE_ROOM, TWO_ROOM, OFFICE, STORE, APARTMENT, VILLA, ETC
+//   TransactionType: MONTHLY, JEONSE, SALE, SHORT_TERM
+//   PropertyStatus: AVAILABLE, CONTRACT_PENDING, CONTRACTED, UNAVAILABLE
+//   ContractType: RENT, JEONSE, SALE
+//   ContractStatus: DRAFT, SIGNED, ACTIVE, COMPLETED, CANCELLED
+//   LedgerType: INCOME, EXPENSE
+//   CustomerStatus: ACTIVE, CONTRACTED, INACTIVE
+//   CustomerPriority: HOT, WARM, COLD
+//   PostCategory: QNA, NAENWAYO, NOTICE, FREE
+
+// ─── Models ──────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  role      String   @default("AGENT")
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  properties         Property[]
+  clientRequests     ClientRequest[]
+  customers          Customer[]
+  contracts          Contract[]
+  ledgerTransactions LedgerTransaction[]
+  posts              Post[]
+  comments           Comment[]
+  consents           ConsentRecord[]
+}
+
+model ClientRequest {
+  id              String   @id @default(uuid())
+  status          String   @default("PENDING")
+
+  clientName      String
+  clientPhone     String
+
+  minDeposit         Int?
+  maxDeposit         Int?
+  minRent            Int?
+  maxRent            Int?
+  preferredLocations String?
+  preferredTypes     String?
+
+  agentId         String
+  agent           User     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([agentId])
+}
+
+model Property {
+  id              String   @id @default(uuid())
+  title           String
+  description     String
+  type            String   // PropertyType enum
+  transactionType String   // TransactionType enum
+  status          String   @default("AVAILABLE") // PropertyStatus enum
+
+  // Financial fields (BigInt for Korean Won)
+  deposit         BigInt?
+  monthlyRent     BigInt?
+  maintenanceFee  BigInt?
+  salePrice       BigInt?
+
+  // Details
+  areaPyeong      Float
+  floor           Int
+  totalFloors     Int
+  roomCount       Int
+  bathroomCount   Int
+
+  // Location
+  address         String
+  roadAddress     String
+  lat             Float
+  lng             Float
+
+  // Relations
+  agentId         String
+  agent           User     @relation(fields: [agentId], references: [id], onDelete: Restrict)
+
+  images          PropertyImage[]
+  contracts       Contract[]
+
+  deletedAt       DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([status])
+  @@index([type])
+  @@index([transactionType])
+  @@index([deposit])
+  @@index([monthlyRent])
+  @@index([deposit, monthlyRent])
+  @@index([lat, lng])
+  @@index([agentId])
+  @@index([deletedAt])
+}
+
+model PropertyImage {
+  id         String   @id @default(uuid())
+  url        String
+  propertyId String
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Customer {
+  id               String   @id @default(uuid())
+
+  name             String
+  phone            String
+  email            String?
+
+  status           String   @default("ACTIVE")  // CustomerStatus enum
+  priority         String   @default("WARM")    // CustomerPriority enum
+
+  preferences      String?  // JSON string (SQLite does not support Json type)
+  notes            String?
+  nextFollowupDate DateTime?
+
+  agentId          String
+  agent            User     @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  contracts        Contract[]
+
+  deletedAt        DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([agentId, phone])
+  @@index([agentId])
+  @@index([status])
+  @@index([priority])
+  @@index([nextFollowupDate])
+  @@index([deletedAt])
+}
+
+model Contract {
+  id              String   @id @default(uuid())
+
+  // Relations
+  propertyId      String
+  property        Property @relation(fields: [propertyId], references: [id], onDelete: Restrict)
+
+  customerId      String
+  customer        Customer @relation(fields: [customerId], references: [id], onDelete: Restrict)
+
+  agentId         String
+  agent           User     @relation(fields: [agentId], references: [id], onDelete: Restrict)
+
+  // Contract Details
+  type            String   // ContractType enum
+  status          String   @default("DRAFT") // ContractStatus enum
+
+  // Financials
+  deposit         BigInt?
+  monthlyRent     BigInt?
+  salePrice       BigInt?
+  commission      BigInt?
+
+  // Dates
+  contractDate    DateTime @default(now())
+  startDate       DateTime?
+  endDate         DateTime?
+  moveInDate      DateTime?
+
+  // Meta
+  note            String?
+  pdfUrl          String?
+
+  deletedAt       DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([agentId])
+  @@index([customerId])
+  @@index([propertyId])
+  @@index([status])
+  @@index([endDate])
+  @@index([deletedAt])
+
+  transactions    LedgerTransaction[]
+}
+
+model LedgerTransaction {
+  id          String   @id @default(uuid())
+  type        String   // LedgerType enum
+  amount      BigInt
+  category    String
+  date        DateTime
+  description String?
+
+  contractId  String?
+  contract    Contract? @relation(fields: [contractId], references: [id], onDelete: SetNull)
+
+  agentId     String
+  agent       User     @relation(fields: [agentId], references: [id], onDelete: Restrict)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([agentId])
+  @@index([date])
+  @@index([type])
+  @@index([agentId, date])
+}
+
+model RealTransaction {
+  id              String   @id @default(uuid())
+  address         String
+  price           BigInt
+  date            DateTime
+
+  area            Float
+  floor           Int
+  type            String
+
+  lat             Float
+  lng             Float
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([lat, lng])
+  @@index([date])
+  @@index([type])
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  category  String   // PostCategory enum
+  views     Int      @default(0)
+
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  comments  Comment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+  @@index([authorId])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+
+  authorId  String?
+  author    User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([postId])
+  @@index([authorId])
+}
+
+model AuditLog {
+  id         Int      @id @default(autoincrement())
+  entityType String
+  entityId   String
+  action     String
+  changes    String?
+  userId     String
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([userId])
+}
+
+model ConsentRecord {
+  id        Int      @id @default(autoincrement())
+  userId    String
+  type      String   // "privacy_policy" | "terms_of_service" | "marketing"
+  version   String   // e.g., "1.0"
+  accepted  Boolean
+  ipAddress String?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([type, version])
+}

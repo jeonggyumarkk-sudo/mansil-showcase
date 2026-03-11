@@ -1,0 +1,19 @@
+{
+    "name": "@mansil/utils",
+    "version": "0.0.0",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "lint": "eslint .",
+        "check-types": "tsc --noEmit",
+        "build": "tsc",
+        "test": "vitest run"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "@mansil/types": "*",
+        "vitest": "^4.0.18"
+    }
+}

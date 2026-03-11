@@ -1,0 +1,27 @@
+# 만실 (Mansil) 프로젝트 필수 API 키 목록
+
+다음 API 키들이 서비스의 정상적인 작동을 위해 필요합니다.
+발급받으신 키를 입력해주시면 프로젝트 환경변수(.env)에 적용하겠습니다.
+
+## 1. 네이버 지도 (Naver Cloud Platform)
+- **용도**: 매물 지도 표시, 주소 검색, 로드뷰, 지적도 기능
+- **서비스**: Maps (Web Dynamic Map)
+- **필요 정보**: 
+    - `Client ID` (X-NCP-APIGW-API-KEY-ID)
+    - `Client Secret` (X-NCP-APIGW-API-KEY)
+
+## 2. 주소 검색 (행정안전부 or Daum Postcode)
+- **용도**: 매물 등록 시 주소 검색
+- **현재 상태**: Daum Postcode(무료 script 방식) 사용 예정이므로 별도 키 불필요. 
+- *만약 좌표 변환 등 정밀한 기능을 위해 카카오 로컬 API를 쓸 경우 아래 항목 필요.*
+
+## 3. 카카오 맵/로컬 API (선택사항)
+- **용도**: 네이버 지도 대안 또는 좌표 변환(Geocoding)
+- **필요 정보**: `JavaScript Key` / `REST API Key`
+
+## 4. 소셜 로그인 (추후 구현 시)
+- **카카오 로그인**: `REST API Key`, `javascript Key`
+- **구글 로그인**: `Client ID`, `Client Secret`
+
+---
+*현재 가장 시급한 것은 **1. 네이버 지도 Client ID** 입니다.*

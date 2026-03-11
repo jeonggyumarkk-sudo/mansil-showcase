@@ -1,0 +1,23 @@
+{
+    "name": "@mansil/database",
+    "version": "0.0.0",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "scripts": {
+        "lint": "eslint .",
+        "check-types": "tsc --noEmit",
+        "build": "prisma generate && tsc",
+        "postinstall": "prisma generate",
+        "migrate:dev": "prisma migrate dev",
+        "migrate:deploy": "prisma migrate deploy",
+        "seed": "ts-node prisma/seed.ts"
+    },
+    "devDependencies": {
+        "typescript": "^5.0.0",
+        "prisma": "^5.0.0"
+    },
+    "dependencies": {
+        "@prisma/client": "^5.0.0",
+        "bcrypt": "^5.1.0"
+    }
+}

@@ -1,0 +1,28 @@
+{
+    "name": "mansil-platform",
+    "private": true,
+    "scripts": {
+        "build": "turbo run build",
+        "dev": "turbo run dev",
+        "lint": "turbo run lint",
+        "test": "turbo run test",
+        "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+        "clean": "turbo run clean && rm -rf node_modules"
+    },
+    "devDependencies": {
+        "@rollup/rollup-linux-x64-gnu": "^4.59.0",
+        "prettier": "^3.0.0",
+        "ts-node": "^10.9.2",
+        "turbo": "^2.7.4",
+        "typescript": "^5.0.0"
+    },
+    "engines": {
+        "node": ">=22.0.0",
+        "npm": ">=10.0.0"
+    },
+    "packageManager": "npm@10.9.4",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ]
+}

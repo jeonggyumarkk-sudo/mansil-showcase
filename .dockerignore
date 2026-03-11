@@ -1,0 +1,14 @@
+node_modules
+.git
+.next
+dist
+*.db
+.env
+.env.local
+.env.*.local
+coverage
+.turbo
+.expo
+*.log
+*.md
+!DEPLOYMENT.md

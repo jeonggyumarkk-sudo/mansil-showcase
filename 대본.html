@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>만실 플랫폼 — 쇼케이스 대본</title>
+<style>
+  :root {
+    --primary: #4F46E5;
+    --primary-light: #EEF2FF;
+    --green: #059669;
+    --green-light: #ECFDF5;
+    --amber: #D97706;
+    --amber-light: #FFFBEB;
+    --red: #DC2626;
+    --red-light: #FEF2F2;
+    --gray-50: #F9FAFB;
+    --gray-100: #F3F4F6;
+    --gray-200: #E5E7EB;
+    --gray-300: #D1D5DB;
+    --gray-500: #6B7280;
+    --gray-700: #374151;
+    --gray-900: #111827;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-900);
+    line-height: 1.7;
+  }
+
+  /* Top nav */
+  .topbar {
+    position: sticky; top: 0; z-index: 100;
+    background: #fff; border-bottom: 1px solid var(--gray-200);
+    padding: 0 32px; display: flex; align-items: center; height: 56px; gap: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .topbar h1 { font-size: 18px; font-weight: 800; color: var(--primary); }
+  .topbar nav { display: flex; gap: 4px; }
+  .topbar nav a {
+    padding: 6px 14px; border-radius: 8px; font-size: 13px; font-weight: 600;
+    text-decoration: none; color: var(--gray-500); transition: all .15s;
+  }
+  .topbar nav a:hover, .topbar nav a.active { background: var(--primary-light); color: var(--primary); }
+
+  /* Layout */
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  /* Sections */
+  section { margin-bottom: 40px; }
+  .section-title {
+    font-size: 22px; font-weight: 800; margin-bottom: 16px;
+    padding-bottom: 8px; border-bottom: 3px solid var(--primary);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-title .num {
+    background: var(--primary); color: #fff; width: 30px; height: 30px;
+    border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 800; flex-shrink: 0;
+  }
+
+  /* Cards */
+  .card {
+    background: #fff; border-radius: 12px; padding: 20px 24px;
+    border: 1px solid var(--gray-200); margin-bottom: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .card h3 { font-size: 15px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .card p, .card li { font-size: 14px; color: var(--gray-700); }
+  .card ul { padding-left: 20px; }
+  .card ul li { margin-bottom: 4px; }
+
+  /* Script callout */
+  .say {
+    background: var(--primary-light); border-left: 4px solid var(--primary);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 14px; color: var(--primary); font-weight: 600;
+  }
+  .say::before { content: '💬 '; }
+
+  /* Warn/tip */
+  .warn {
+    background: var(--amber-light); border-left: 4px solid var(--amber);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 13px; color: #92400E;
+  }
+  .warn::before { content: '⚠️ '; }
+  .tip {
+    background: var(--green-light); border-left: 4px solid var(--green);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0;
+    font-size: 13px; color: #065F46;
+  }
+  .tip::before { content: '💡 '; }
+
+  /* Badge */
+  .badge {
+    display: inline-block; padding: 2px 10px; border-radius: 100px;
+    font-size: 11px; font-weight: 700; margin-right: 4px;
+  }
+  .badge-time { background: var(--gray-100); color: var(--gray-500); }
+  .badge-live { background: var(--green-light); color: var(--green); }
+  .badge-wip { background: var(--amber-light); color: var(--amber); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+  th { background: var(--gray-100); text-align: left; padding: 8px 12px; font-weight: 700; border-bottom: 2px solid var(--gray-200); }
+  td { padding: 7px 12px; border-bottom: 1px solid var(--gray-100); }
+  tr:hover td { background: var(--gray-50); }
+
+  /* Color dots */
+  .color-dot {
+    display: inline-block; width: 12px; height: 12px; border-radius: 50%;
+    margin-right: 6px; vertical-align: middle;
+  }
+
+  /* Code */
+  code {
+    background: var(--gray-100); padding: 2px 8px; border-radius: 4px;
+    font-size: 13px; font-family: 'SF Mono', Consolas, monospace;
+  }
+  pre {
+    background: var(--gray-900); color: #E5E7EB; padding: 16px 20px;
+    border-radius: 10px; font-size: 13px; overflow-x: auto;
+    font-family: 'SF Mono', Consolas, monospace; margin: 8px 0;
+  }
+
+  /* Roadmap */
+  .roadmap { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+  .roadmap-item {
+    padding: 16px; border-radius: 10px; border: 1px solid var(--gray-200);
+    background: #fff; text-align: center;
+  }
+  .roadmap-item.done { border-color: var(--green); background: var(--green-light); }
+  .roadmap-item .month { font-size: 12px; font-weight: 800; color: var(--gray-500); margin-bottom: 4px; }
+  .roadmap-item.done .month { color: var(--green); }
+  .roadmap-item .desc { font-size: 13px; font-weight: 600; }
+
+  /* Credentials box */
+  .cred-box {
+    background: var(--gray-900); color: #fff; padding: 20px 24px;
+    border-radius: 12px; display: flex; gap: 40px; align-items: center;
+    margin: 12px 0;
+  }
+  .cred-box .label { font-size: 11px; color: var(--gray-300); font-weight: 600; text-transform: uppercase; }
+  .cred-box .value { font-size: 16px; font-weight: 700; font-family: 'SF Mono', Consolas, monospace; margin-top: 2px; }
+
+  /* Collapse */
+  details { margin: 8px 0; }
+  details summary {
+    cursor: pointer; font-weight: 700; font-size: 14px; color: var(--gray-700);
+    padding: 8px 0; user-select: none;
+  }
+  details summary:hover { color: var(--primary); }
+  details[open] summary { color: var(--primary); }
+
+  /* Flow step */
+  .flow-step {
+    display: flex; gap: 16px; margin-bottom: 20px;
+    padding: 20px; background: #fff; border-radius: 12px;
+    border: 1px solid var(--gray-200); position: relative;
+  }
+  .flow-step .step-num {
+    width: 36px; height: 36px; border-radius: 50%; background: var(--primary);
+    color: #fff; font-weight: 800; font-size: 16px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .flow-step .step-body { flex: 1; }
+  .flow-step .step-body h3 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+  .flow-step .step-body h3 .badge { vertical-align: middle; margin-left: 8px; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>만실</h1>
+  <nav>
+    <a href="#run" class="active">실행</a>
+    <a href="#flow">시연 흐름</a>
+    <a href="#data">데이터</a>
+    <a href="#tech">기술</a>
+    <a href="#roadmap">로드맵</a>
+    <a href="#qa">Q&A</a>
+  </nav>
+</div>
+
+<div class="container">
+
+<!-- ============ 실행 ============ -->
+<section id="run">
+  <div class="section-title"><span class="num">0</span> 실행 방법</div>
+  <pre>cd /home/mansil/20260312_showcase
+npm install
+
+# 터미널 1 — API 서버
+cd apps/api && npx nest start --watch
+
+# 터미널 2 — Web 서버
+cd apps/web && npx next dev --port 3000</pre>
+
+  <div class="cred-box">
+    <div><div class="label">접속 주소</div><div class="value">http://localhost:3000</div></div>
+    <div><div class="label">이메일</div><div class="value">demo@mansil.com</div></div>
+    <div><div class="label">비밀번호</div><div class="value">password123</div></div>
+  </div>
+</section>
+
+<!-- ============ 시연 흐름 ============ -->
+<section id="flow">
+  <div class="section-title"><span class="num">1</span> 시연 흐름 (약 10분)</div>
+
+  <div class="flow-step">
+    <div class="step-num">1</div>
+    <div class="step-body">
+      <h3>로그인 <span class="badge badge-time">30초</span></h3>
+      <ul>
+        <li>http://localhost:3000/login 접속</li>
+        <li><code>demo@mansil.com</code> / <code>password123</code> 입력 후 로그인</li>
+      </ul>
+      <div class="say">JWT 기반 인증 시스템으로 구현했습니다. 세션은 24시간 유지됩니다.</div>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="step-num">2</div>
+    <div class="step-body">
+      <h3>대시보드 <span class="badge badge-time">1분</span></h3>
+      <ul>
+        <li>등록 매물 수, 문의, 계약예정, 오늘일정 — 4개 통계 카드</li>
+        <li>최근 등록한 매물 목록 (카드 형태)</li>
+        <li>알림 섹션 (현재 빈 상태)</li>
+      </ul>
+      <div class="say">중개사가 로그인하면 가장 먼저 보는 화면입니다. 핵심 지표를 한눈에 확인할 수 있습니다.</div>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="step-num">3</div>
+    <div class="step-body">
+      <h3>매물지도 <span class="badge badge-live">핵심 기능</span> <span class="badge badge-time">5~7분</span></h3>
+      <p style="margin-bottom:12px">사이드바에서 <strong>"매물지도"</strong> 클릭</p>
+
+      <div class="card">
+        <h3>지도 조작</h3>
+        <ul>
+          <li><strong>줌 아웃</strong> — 클러스터 원형 마커 (숫자 + 주요 유형 색상)</li>
+          <li><strong>줌 인</strong> — 개별 컬러 점 마커 → 더 확대하면 가격 버블</li>
+          <li><strong>마커 클릭</strong> → 팝업: 사진, 유형, 가격, 주소, 층수, 옵션 태그</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>필터링 시연</h3>
+        <ul>
+          <li>상단 <strong>유형 필터 칩</strong> — 원룸, 투룸, 아파트 등 클릭</li>
+          <li><strong>검색창</strong> — "용두동", "어반브릿지" 등 입력</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>레이아웃 시연</h3>
+        <ul>
+          <li><strong>지도/둘다/목록</strong> 보기 전환 버튼</li>
+          <li>구분선을 <strong>드래그</strong>해서 지도-리스트 비율 자유 조절</li>
+          <li>리스트 — 썸네일 사진 + 유형 뱃지 + 가격 + 주소 + 옵션 태그</li>
+        </ul>
+      </div>
+
+      <div class="say">대전 지역 실매물 6,694건을 지도 위에서 직관적으로 탐색할 수 있습니다. 3,797건은 실제 사진이 연결되어 있습니다.</div>
+      <div class="tip">시연 시 "용두동" 검색 → 투룸 필터 → 마커 클릭 → 팝업 사진 확인 순서가 자연스럽습니다.</div>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="step-num">4</div>
+    <div class="step-body">
+      <h3>고객관리 <span class="badge badge-time">1~2분</span></h3>
+      <ul>
+        <li>사이드바에서 <strong>"고객관리"</strong> 클릭</li>
+        <li>고객 목록 조회, 등록, 수정, 삭제 (CRUD)</li>
+      </ul>
+      <div class="say">중개사가 관리하는 고객 데이터베이스입니다. 매물과 고객을 연결하는 기반이 됩니다.</div>
+    </div>
+  </div>
+
+  <div class="flow-step">
+    <div class="step-num">5</div>
+    <div class="step-body">
+      <h3>개발 중 페이지 <span class="badge badge-wip">개발 중</span> <span class="badge badge-time">30초</span></h3>
+      <ul>
+        <li>계약관리, 장부관리, 일정관리, 매칭요청, 커뮤니티 — 각각 클릭</li>
+        <li>"현재 개발 중입니다" 안내 표시</li>
+      </ul>
+      <div class="say">메뉴 구조는 설계가 완료되어 있고, 이후 단계에서 순차적으로 구현할 예정입니다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 데이터 ============ -->
+<section id="data">
+  <div class="section-title"><span class="num">2</span> 데이터 레퍼런스</div>
+
+  <div class="card">
+    <h3>매물 데이터 개요</h3>
+    <table>
+      <tr><td style="width:180px;font-weight:600">총 매물 수</td><td>6,694건</td></tr>
+      <tr><td style="font-weight:600">사진 연결</td><td>3,797건 (57%)</td></tr>
+      <tr><td style="font-weight:600">고유 좌표</td><td>6,295개 (건물 단위 정밀 좌표)</td></tr>
+      <tr><td style="font-weight:600">지역</td><td>대전광역시</td></tr>
+      <tr><td style="font-weight:600">데이터 소스</td><td>샘플 데이터 (시연용)</td></tr>
+    </table>
+    <div class="warn">외부에서 "데이터 출처가 뭔가요?" 질문 시 → "시연용 샘플 데이터입니다"로 답변</div>
+  </div>
+
+  <div class="card">
+    <h3>매물 유형 (9종)</h3>
+    <table>
+      <thead><tr><th>유형</th><th>지도 색상</th><th>컬러</th></tr></thead>
+      <tbody>
+        <tr><td>원룸</td><td><span class="color-dot" style="background:#3B82F6"></span>파랑</td><td><code>#3B82F6</code></td></tr>
+        <tr><td>1.5룸</td><td><span class="color-dot" style="background:#6366F1"></span>인디고</td><td><code>#6366F1</code></td></tr>
+        <tr><td>투룸</td><td><span class="color-dot" style="background:#10B981"></span>초록</td><td><code>#10B981</code></td></tr>
+        <tr><td>쓰리룸</td><td><span class="color-dot" style="background:#F59E0B"></span>주황</td><td><code>#F59E0B</code></td></tr>
+        <tr><td>쓰리룸+</td><td><span class="color-dot" style="background:#EF4444"></span>빨강</td><td><code>#EF4444</code></td></tr>
+        <tr><td>아파트</td><td><span class="color-dot" style="background:#8B5CF6"></span>보라</td><td><code>#8B5CF6</code></td></tr>
+        <tr><td>오피스텔</td><td><span class="color-dot" style="background:#EC4899"></span>핑크</td><td><code>#EC4899</code></td></tr>
+        <tr><td>빌라</td><td><span class="color-dot" style="background:#14B8A6"></span>틸</td><td><code>#14B8A6</code></td></tr>
+        <tr><td>고시원</td><td><span class="color-dot" style="background:#6B7280"></span>회색</td><td><code>#6B7280</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>거래 유형</h3>
+    <table>
+      <thead><tr><th>표시</th><th>의미</th><th>가격 표시 예시</th></tr></thead>
+      <tbody>
+        <tr><td><strong>월세</strong></td><td>보증금 + 월세</td><td><code>500/45만</code></td></tr>
+        <tr><td><strong>전세</strong></td><td>전세금만</td><td><code>전세 5,000만</code> 또는 <code>전세 1.5억</code></td></tr>
+        <tr><td><strong>문의</strong></td><td>가격 미정</td><td><code>가격 문의</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <details>
+    <summary>방 옵션 코드표 (19종) — 펼쳐보기</summary>
+    <table>
+      <thead><tr><th>코드</th><th>한글</th><th>빈도</th></tr></thead>
+      <tbody>
+        <tr><td><code>AC</code></td><td>에어컨</td><td>5,915건</td></tr>
+        <tr><td><code>FG</code></td><td>풀옵션</td><td>5,243건</td></tr>
+        <tr><td><code>TV</code></td><td>TV</td><td>4,727건</td></tr>
+        <tr><td><code>GC</code></td><td>가스레인지</td><td>3,492건</td></tr>
+        <tr><td><code>WD</code></td><td>옷장</td><td>3,342건</td></tr>
+        <tr><td><code>BD</code></td><td>침대</td><td>3,252건</td></tr>
+        <tr><td><code>WS</code></td><td>세탁기</td><td>2,855건</td></tr>
+        <tr><td><code>DK</code></td><td>데스크</td><td>2,543건</td></tr>
+        <tr><td><code>W2</code></td><td>건조기</td><td>2,433건</td></tr>
+        <tr><td><code>G2</code></td><td>인덕션</td><td>2,376건</td></tr>
+        <tr><td><code>MW</code></td><td>전자레인지</td><td>2,357건</td></tr>
+        <tr><td><code>DL</code></td><td>도어락</td><td>988건</td></tr>
+        <tr><td><code>PK</code></td><td>주차</td><td>382건</td></tr>
+        <tr><td><code>W3</code></td><td>식기세척기</td><td>248건</td></tr>
+        <tr><td><code>VX</code></td><td>비데</td><td>129건</td></tr>
+        <tr><td><code>TR</code></td><td>건조대</td><td>102건</td></tr>
+        <tr><td><code>DB</code></td><td>더블베드</td><td>95건</td></tr>
+        <tr><td><code>ST</code></td><td>수납장</td><td>45건</td></tr>
+        <tr><td><code>RT</code></td><td>냉장고</td><td>38건</td></tr>
+      </tbody>
+    </table>
+  </details>
+
+  <details>
+    <summary>건물 옵션 코드표 (12종) — 펼쳐보기</summary>
+    <table>
+      <thead><tr><th>코드</th><th>한글</th><th>빈도</th></tr></thead>
+      <tbody>
+        <tr><td><code>NA</code></td><td>인터넷</td><td>5,089건</td></tr>
+        <tr><td><code>CT</code></td><td>CCTV</td><td>3,552건</td></tr>
+        <tr><td><code>I</code></td><td>무인택배</td><td>1,756건</td></tr>
+        <tr><td><code>T</code></td><td>택배보관</td><td>1,680건</td></tr>
+        <tr><td><code>E</code></td><td>엘리베이터</td><td>1,657건</td></tr>
+        <tr><td><code>W</code></td><td>정수기</td><td>1,413건</td></tr>
+        <tr><td><code>A</code></td><td>공용세탁</td><td>731건</td></tr>
+        <tr><td><code>RH</code></td><td>옥탑</td><td>388건</td></tr>
+        <tr><td><code>PK</code></td><td>주차</td><td>303건</td></tr>
+        <tr><td><code>NW</code></td><td>신축</td><td>135건</td></tr>
+        <tr><td><code>BX</code></td><td>분리수거</td><td>98건</td></tr>
+        <tr><td><code>WM</code></td><td>관리비포함</td><td>12건</td></tr>
+      </tbody>
+    </table>
+  </details>
+</section>
+
+<!-- ============ 기술 스택 ============ -->
+<section id="tech">
+  <div class="section-title"><span class="num">3</span> 기술 스택</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+    <div class="card">
+      <h3>프론트엔드</h3>
+      <ul>
+        <li><strong>Next.js 14</strong> — App Router</li>
+        <li><strong>React 18</strong> + TypeScript</li>
+        <li><strong>Tailwind CSS</strong> — 유틸리티 기반 스타일링</li>
+        <li><strong>Leaflet.js</strong> — 지도 렌더링</li>
+        <li>CartoDB Positron 타일</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>백엔드</h3>
+      <ul>
+        <li><strong>NestJS</strong> — 모듈 기반 API</li>
+        <li><strong>Prisma ORM</strong> + SQLite</li>
+        <li><strong>JWT</strong> 인증 (bcrypt 해싱)</li>
+        <li>RESTful API 설계</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>인프라 / 도구</h3>
+      <ul>
+        <li><strong>Turborepo</strong> — 모노레포 관리</li>
+        <li><strong>npm workspaces</strong></li>
+        <li>공유 패키지: <code>@mansil/ui</code>, <code>@mansil/types</code></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>성능 최적화</h3>
+      <ul>
+        <li>매물 데이터 <strong>gzip 압축</strong> (2.8MB → 290KB)</li>
+        <li>서버 메모리 캐싱</li>
+        <li>클라이언트 사이드 필터링 (API 재호출 없음)</li>
+        <li>그리드 기반 마커 클러스터링</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 로드맵 ============ -->
+<section id="roadmap">
+  <div class="section-title"><span class="num">4</span> 개발 로드맵</div>
+
+  <div class="roadmap">
+    <div class="roadmap-item done">
+      <div class="month">2~3월 (완료)</div>
+      <div class="desc">인증, 대시보드<br>매물지도, 고객관리</div>
+    </div>
+    <div class="roadmap-item">
+      <div class="month">4월</div>
+      <div class="desc">계약관리<br>장부관리</div>
+    </div>
+    <div class="roadmap-item">
+      <div class="month">5월</div>
+      <div class="desc">일정관리<br>매칭요청</div>
+    </div>
+    <div class="roadmap-item">
+      <div class="month">6월</div>
+      <div class="desc">커뮤니티<br>알림 시스템</div>
+    </div>
+    <div class="roadmap-item">
+      <div class="month">7월</div>
+      <div class="desc">네이버 지도 연동<br>배포 · QA</div>
+    </div>
+    <div class="roadmap-item">
+      <div class="month">8월</div>
+      <div class="desc">최종 런칭</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Q&A ============ -->
+<section id="qa">
+  <div class="section-title"><span class="num">5</span> 예상 질문 & 답변</div>
+
+  <div class="card">
+    <h3>Q. 데이터 출처가 어디인가요?</h3>
+    <p>시연용 샘플 데이터입니다. 실제 서비스에서는 공공데이터 API와 직접 입력 데이터를 사용할 예정입니다.</p>
+  </div>
+  <div class="card">
+    <h3>Q. 왜 Leaflet인가요? 네이버/카카오 지도는?</h3>
+    <p>개발 초기 단계에서 빠른 프로토타이핑을 위해 오픈소스인 Leaflet을 사용했습니다. 7월에 네이버 지도 API로 전환할 계획입니다.</p>
+  </div>
+  <div class="card">
+    <h3>Q. 왜 SQLite인가요?</h3>
+    <p>개발/프로토타입 단계에서 별도 DB 서버 없이 빠르게 진행하기 위해서입니다. 배포 시 PostgreSQL로 마이그레이션합니다. Prisma ORM이라 전환이 간단합니다.</p>
+  </div>
+  <div class="card">
+    <h3>Q. 모바일 지원은?</h3>
+    <p>반응형으로 설계되어 있습니다. 모바일에서는 하단 네비게이션 바가 나타나고, 지도/목록 전환이 가능합니다.</p>
+  </div>
+  <div class="card">
+    <h3>Q. 6,694건인데 성능은?</h3>
+    <p>서버에서 gzip 압축으로 290KB로 전송하고, 클라이언트에서 한 번 로드 후 필터링합니다. 줌 레벨에 따라 자동 클러스터링되어 수천 개 마커도 부드럽게 렌더링됩니다.</p>
+  </div>
+  <div class="card">
+    <h3>Q. 완성 목표 시점은?</h3>
+    <p>7~8월 런칭이 목표입니다. 현재 핵심 뼈대(인증, 대시보드, 매물지도, 고객관리)가 완성되었고, 계약관리부터 순차적으로 진행합니다.</p>
+  </div>
+</section>
+
+</div>
+
+<script>
+// Smooth scroll for nav links
+document.querySelectorAll('.topbar nav a').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const id = a.getAttribute('href').slice(1);
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.querySelectorAll('.topbar nav a').forEach(x => x.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+// Highlight active section on scroll
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.topbar nav a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) current = s.id; });
+  navLinks.forEach(a => {
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+</body>
+</html>

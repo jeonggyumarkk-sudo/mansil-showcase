@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx prisma generate --schema=packages/database/prisma/schema.prisma
+      - run: npx turbo run build
+      - name: Lint
+        run: npx turbo run lint
+      - name: Run API tests
+        run: cd apps/api && npx jest --forceExit --coverage
+        env:
+          JWT_SECRET: test-secret-for-ci
+      - name: Run Web tests
+        run: cd apps/web && npx vitest run --coverage
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: |
+            apps/api/coverage
+            apps/web/coverage
